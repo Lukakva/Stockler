@@ -157,7 +157,7 @@ class App extends React.Component {
     return (
       <div className='app'>
         {
-          Object.keys(this.state.tweets).length === 1 ? null : (
+          Object.keys(this.state.tweets).length === 0 ? null : (
             <div
               id='fullscreen'
               className={this.state.isFullScreen ? 'arrow-down' : 'arrow-up'}
