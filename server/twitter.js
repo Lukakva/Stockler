@@ -22,9 +22,6 @@ class TwitterRequest {
       'Access-Control-Allow-Origin': '*',
     })
 
-    console.log(obj)
-    console.log(JSON.stringify(obj))
-
     this.res.write(JSON.stringify(obj))
     this.res.end()
   }
@@ -36,19 +33,33 @@ class TwitterRequest {
   }
 
   handle() {
-    // sort of a JSONP situation?
     let error = data => {
-      this.json({
-        callback: 'error',
-        data: JSON.parse(data),
-      })
+      try {
+        this.json({
+          success: false,
+          data: JSON.parse(data),
+        })
+      } catch (e) {
+        this.json({
+          success: false,
+          data: {
+            errors: 'WELL'
+          }
+        })
+
+        console.log('error', data)
+      }
     }
 
     let success = data => {
-      this.json({
-        callback: 'success',
-        data: JSON.parse(data),
-      })
+      try {
+        this.json({
+          success: true,
+          data: JSON.parse(data),
+        })
+      } catch (e) {
+        console.log('success', data)
+      }
     }
 
     // which method to call on the Twitter API Client

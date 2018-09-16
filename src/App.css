@@ -1,19 +1,65 @@
 .app {
+    height: 100%;
     width: 100%;
     text-align: center;
     padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    max-height: 300px;
+    overflow: hidden;
+
+    transition: 0.5s;
+}
+
+.header.collapsed {
+    max-height: 0;
+    margin-bottom: 0;
+}
+
+#fullscreen {
+    border: 10px solid transparent;
+
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    transform: rotateZ(0deg);
+    transition: transform 0.3s;
+
+    border-top-color: #1da1f2;
+    transform-origin: 10px 5px;
+}
+
+#fullscreen.arrow-up {
+    transform: rotateZ(180deg);
+}
+
+#fullscreen.arrow-down {
+    transform: rotate(360deg);
+}
+
+#fullscreen:active {
+    opacity: 0.5;
+}
+
+.title-wrapper {
+    margin-bottom: 60px;
 }
 
 .input-wrapper {
-    margin-top: 100px;
+    margin-top: 10px;
     white-space: nowrap;
 }
 
 .input-wrapper input {
-    padding: 7px;
+    padding: 7px 10px;
     font-size: 14px;
     min-width: 100%;
-    border-radius: 4px;
+    border-radius: 35px;
     border: 2px solid rgba(0, 0, 0, 0.1);
     margin-top: 10px;
 
@@ -25,7 +71,7 @@
 }
 
 .input-wrapper input:focus {
-    border-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(29, 161, 242, 0.5);
 }
 
 .input-wrapper input.error {
@@ -36,15 +82,19 @@
 .input-wrapper button {
     display: inline-block;
     margin-left: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 5px 15px;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: #eee;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 7px 18px;
+    border-radius: 35px;
+    background-color: #1da1f2;
+    color: #fafafa;
     font-size: 14px;
     outline: none;
 
     cursor: pointer;
+}
+
+.input-wrapper button:hover {
+    background-color: #3eb5ff;
 }
 
 .input-wrapper button:active {
@@ -52,8 +102,9 @@
 }
 
 .input-wrapper label {
-    text-align: left;
+    text-align: center;
     display: inline-block;
+    font-size: 14px;
 }
 
 .title {
@@ -61,11 +112,130 @@
     text-transform: uppercase;
 }
 
-.description {
-    margin-bottom: 20px;
+#tweets {
+    margin-top: 20px;
+    font-size: 0;
+    white-space: nowrap;
+    overflow: auto;
+    flex: 1;
+
+    display: flex;
+    position: relative;
+}
+
+#tweets > .tweets-symbol-container {
+    position: relative;
+    vertical-align: top;
+    display: inline-block;
+    width: 30%;
+    margin-right: 10px;
+    height: 100%;
+
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#tweets .tweets-scroll {
+    position: relative;
+    overflow: auto;
+    padding: 0 10px;
+    margin-top: 10px;
+    flex: 1;
+}
+
+/* Styling tweets */
+.tweets-scroll > div > * {
+    margin-top: 0 !important;
+}
+
+.tweets-scroll > div:last-child > * {
+    margin-bottom: 0 !important;
+}
+
+.symbol {
+    border: 1px solid tomato;
+    border-radius: 20px;
+
+    color: tomato;
+    font-size: 14px;
+    text-transform: uppercase;
+
+    position: relative;
+
+    width: auto;
+    margin: 0 auto;
+    padding: 7px 10px;
+    padding-right: 40px;
+    overflow: hidden;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.symbol .remove {
+    position: absolute;
+    margin-left: 10px;
+    cursor: pointer;
+    opacity: 0.7;
+
+    height: 100%;
+    width: 30px;
+    border-radius: 35px;
+    right: 0;
+
+    font-size: 0;
+    transition: 0.2s;
+}
+
+.remove:hover {
+    background: red;
+}
+
+.remove:active {
+    opacity: 0.5;
+}
+
+.symbol .remove:hover svg path {
+    fill: rgba(255, 255, 255, 0.7);
+}
+
+.symbol .remove svg {
+    height: 100%;
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    height: 12px;
+    width: 12px;
+
+    margin: -6px;
+}
+
+.symbol .remove svg path {
+    fill: tomato;
 }
 
 @media only screen and (max-width: 768px) {
+    .title {
+        font-size: 20px;
+    }
+
+    .label-text {
+        display: none;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .title-wrapper {
+        margin-bottom: 10px;
+    }
+
     .input-wrapper label {
         width: 100%;
     }
@@ -73,7 +243,17 @@
     .input-wrapper button {
         display: block;
         margin-top: 10px;
-        margin-left: 0;
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+    #tweets > .tweets-symbol-container {
         width: 100%;
     }
+
+    .symbol {
+        padding: 5px 10px;
+    }
 }
+

@@ -12,44 +12,40 @@ export default class Twitter {
     methods.map(methodName => {
       this[methodName] = (params, error, success) => {
         let data = JSON.stringify(params)
-        this.proxy(methodName, params, error, success)
+        return this.proxy(methodName, params, error, success)
       }
     })
   }
 
   /* Sends a request to the Node.js server, telling it to call the 'methodName' method on the Twitter API JS Client */
-  proxy(methodName, params, error, success) {
+  proxy(methodName, params) {
     let data = {
       method: methodName,
       params: params,
     }
 
-    let callbacks = {
-      error: error,
-      success: success,
-    }
-
-    fetch(this.url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }).then(response => {
-      return response.text()
-    }).then(response => {
-      console.log(response)
-      try {
-        let json = JSON.parse(response)
-        let callbackName = json.callback
-
-        if (callbacks[callbackName]) {
-          callbacks[callbackName](json.data);
+    return new Promise(resolve => {
+      fetch(this.url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }).then(response => {
+        return response.text()
+      }).then(response => {
+        try {
+          let json = JSON.parse(response)
+          resolve(json)
+        } catch (e) {
+          resolve({
+            success: false,
+            data: e,
+          })
         }
-      } catch (e) {
-        return error(e)
-      }
-
-      success(response)
-    }).catch(err => {
-      error(err)
+      }).catch(err => {
+        resolve({
+          success: false,
+          data: err,
+        })
+      })
     })
   }
 }

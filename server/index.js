@@ -9,15 +9,6 @@ http.createServer((request, response) => {
     body.push(chunk)
   }).on('end', () => {
     body = Buffer.concat(body).toString();
-    if (!body) {
-      body = JSON.stringify({
-        method: 'getSearch',
-        params: {
-          q: '#haiku',
-          count: 10,
-        }
-      })
-    }
     new TwitterRequest(body, response)
   })
 }).listen(9000, () => {
