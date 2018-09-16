@@ -1,0 +1,79 @@
+.app {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+.input-wrapper {
+    margin-top: 100px;
+    white-space: nowrap;
+}
+
+.input-wrapper input {
+    padding: 7px;
+    font-size: 14px;
+    min-width: 100%;
+    border-radius: 4px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+
+    -webkit-transition: 0.2s;
+    -moz-transition: 0.2s;
+    transition: 0.2s;
+
+    outline: none;
+}
+
+.input-wrapper input:focus {
+    border-color: rgba(0, 0, 0, 0.5);
+}
+
+.input-wrapper input.error {
+    border-color: rgba(255, 0, 0, 0.5);
+    background-color: rgba(255, 0, 0, 0.05);
+}
+
+.input-wrapper button {
+    display: inline-block;
+    margin-left: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 5px 15px;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #eee;
+    font-size: 14px;
+    outline: none;
+
+    cursor: pointer;
+}
+
+.input-wrapper button:active {
+    opacity: 0.5;
+}
+
+.input-wrapper label {
+    text-align: left;
+    display: inline-block;
+}
+
+.title {
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.description {
+    margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 768px) {
+    .input-wrapper label {
+        width: 100%;
+    }
+
+    .input-wrapper button {
+        display: block;
+        margin-top: 10px;
+        margin-left: 0;
+        width: 100%;
+    }
+}
