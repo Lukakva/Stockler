@@ -63,6 +63,8 @@
     border: 2px solid rgba(0, 0, 0, 0.1);
     margin-top: 10px;
 
+    text-transform: uppercase;
+
     -webkit-transition: 0.2s;
     -moz-transition: 0.2s;
     transition: 0.2s;
@@ -252,8 +254,17 @@
         width: 100%;
     }
 
+    #tweets > .tweets-symbol-container:not(:only-child):first-child {
+        width: 90%;
+    }
+
     .symbol {
         padding: 5px 10px;
+        padding-right: 35px;
+    }
+
+    .symbol .remove {
+        width: 28px;
     }
 }
 

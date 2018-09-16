@@ -76,6 +76,12 @@ class App extends React.Component {
   }
 
   addSymbol(symbol) {
+    if (typeof symbol !== 'string') return
+
+    symbol = symbol.trim()
+    if (symbol.length === 0) return
+    if (this.state.tweets[symbol]) return
+
     // just to re-render stuff
     let tweets = copy(this.state.tweets)
     tweets[symbol] = []
@@ -114,6 +120,14 @@ class App extends React.Component {
     })
   }
 
+  onInputKeydown(e) {
+    let keyCode = e.keyCode || e.which
+    // enter
+    if (keyCode === 13) {
+      this.listen()
+    }
+  }
+
   toggleFullScreen() {
     this.setState({
       isFullScreen: !this.state.isFullScreen,
@@ -121,12 +135,13 @@ class App extends React.Component {
   }
 
   async listen() {
-    let symbol = this.refs.symbolInput.value
-    if (!symbol.length) {
+    let symbols = this.refs.symbolInput.value
+    if (!symbols.length) {
       return this.inputIsInvalid()
     }
 
-    this.addSymbol(symbol)
+    this.refs.symbolInput.value = ''
+    symbols.split(',').map(this.addSymbol.bind(this))
   }
 
   renderTweets() {
@@ -173,15 +188,16 @@ class App extends React.Component {
 
           <div className='input-wrapper'>
             <label>
-              <div className='label-text'>Type in the ticker symbol</div>
+              <div className='label-text'>Type in the ticker symbol(s)</div>
               <div>
                 <input
                   ref='symbolInput'
                   onInput={this.inputIsValid.bind(this)}
+                  onKeyDown={this.onInputKeydown.bind(this)}
                   className={this.state.inputIsValid ? '' : 'error'}
 
                   type='text'
-                  placeholder='Ex: AAPL'
+                  placeholder='AAPL, GOOG, TSLA'
                 />
                 <button id='listen' type='button' onClick={this.listen.bind(this)}>Listen</button>
               </div>

@@ -2,7 +2,7 @@
 // (well, only functions that I need)
 export default class Twitter {
   constructor() {
-    this.url = window.location.origin + ':' + 9000
+    this.url = window.location.protocol + '//' + window.location.hostname + ':' + 9000
 
     let methods = [
       'getSearch',
