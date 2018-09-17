@@ -147,7 +147,7 @@ class App extends React.Component {
   renderTweets() {
     let containers = Object.keys(this.state.tweets).map(symbol => {
       let tweets = this.state.tweets[symbol].map(id => {
-        return <Tweet tweetId={id} key={id} options={TweetDisplayOptions} />
+        return <Tweet tweetId={id} key={id} options={TweetDisplayOptions} onLoad={() => console.log('lel')} />
       })
 
       return (
