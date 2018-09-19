@@ -30,7 +30,7 @@ html, body, #root {
     flex-direction: column;
     background-color: #fefefe;
     color: #111;
-    transition: 700ms;
+    transition: 0.7s;
 }
 
 .app.dark {
@@ -51,6 +51,7 @@ html, body, #root {
 .header {
     max-height: 300px;
     overflow: hidden;
+    transition: max-height 0.2s linear;
 }
 
 .header.collapsed {
