@@ -6,13 +6,29 @@
 
     display: flex;
     flex-direction: column;
+    background-color: #fefefe;
+    color: #111;
+    transition: 700ms;
+}
+
+.app.dark {
+    background-color: #141d26;
+    color: #fafafa;
+}
+
+.app.dark .input-wrapper input {
+    /*background-color: rgba(100, 100, 100, 0.1);
+    color: #fafafa;
+    border-color: rgba(255, 255, 255, 0.2);*/
+}
+
+.app.dark #listen {
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .header {
     max-height: 300px;
     overflow: hidden;
-
-    transition: 0.5s;
 }
 
 .header.collapsed {
@@ -20,18 +36,56 @@
     margin-bottom: 0;
 }
 
+#top-buttons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+}
+
 #fullscreen {
     border: 10px solid transparent;
-
-    position: absolute;
-    top: 20px;
-    right: 20px;
 
     transform: rotateZ(0deg);
     transition: transform 0.3s;
 
     border-top-color: #1da1f2;
     transform-origin: 10px 5px;
+}
+
+#moon {
+    opacity: 0.8;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+#moon:hover {
+    opacity: 1;
+}
+
+#moon:active {
+    opacity: 0.5;
+}
+
+#moon span {
+    font-size: 14px;
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#moon img {
+    height: 20px;
+    cursor: pointer;
 }
 
 #fullscreen.arrow-up {
@@ -53,6 +107,7 @@
 .input-wrapper {
     margin-top: 10px;
     white-space: nowrap;
+    padding-bottom: 5px;
 }
 
 .input-wrapper input {
@@ -60,8 +115,9 @@
     font-size: 14px;
     min-width: 100%;
     border-radius: 35px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.2);
     margin-top: 10px;
+    line-height: 16px;
 
     text-transform: uppercase;
 
@@ -72,35 +128,38 @@
     outline: none;
 }
 
-.input-wrapper input:focus {
-    border-color: rgba(29, 161, 242, 0.5);
+.input-wrapper input:focus:not(.error) {
+    border-color: rgba(29, 161, 242, 0.9) !important;
 }
 
-.input-wrapper input.error {
+body .app .input-wrapper input.error {
+    color: black;
     border-color: rgba(255, 0, 0, 0.5);
-    background-color: rgba(255, 0, 0, 0.05);
+    background-color: rgb(254, 242, 242);
 }
 
-.input-wrapper button {
+#listen {
     display: inline-block;
     margin-left: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 7px 18px;
     border-radius: 35px;
     background-color: #1da1f2;
     color: #fafafa;
     font-size: 14px;
     outline: none;
+    letter-spacing: 1px;
 
     cursor: pointer;
+    transition: 0.1s;
 }
 
-.input-wrapper button:hover {
-    background-color: #3eb5ff;
+.app.dark #listen:active {
+    box-shadow: 0 0 0 2px #1B2836, 0 0 0 4px #1B7FBE;
 }
 
-.input-wrapper button:active {
-    opacity: 0.5;
+#listen:active {
+    box-shadow: 0 0 0 2px #FEFEFE, 0 0 0 4px #1B7FBE;
 }
 
 .input-wrapper label {
@@ -112,6 +171,16 @@
 .title {
     margin-bottom: 10px;
     text-transform: uppercase;
+    font-weight: normal;
+}
+
+.description {
+    opacity: 0.5;
+    letter-spacing: 0.4px;
+}
+
+.label-text {
+    letter-spacing: 1px;
 }
 
 #tweets {
@@ -120,6 +189,7 @@
     white-space: nowrap;
     overflow: auto;
     flex: 1;
+    width: 100%;
 
     display: flex;
     position: relative;
@@ -145,15 +215,19 @@
     padding: 0 10px;
     margin-top: 10px;
     flex: 1;
+    width: 100%;
 }
 
 /* Styling tweets */
 .tweets-scroll > div > * {
     margin-top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
 }
 
 .tweets-scroll > div {
     opacity: 0;
+    width: 100%;
 
     animation: fadeIn 0.5s linear forwards;
     animation-delay: 1s;
@@ -164,10 +238,10 @@
 }
 
 .symbol {
-    border: 1px solid tomato;
+    border: 1px solid #ff5258;
     border-radius: 20px;
 
-    color: tomato;
+    color: #ff5258;
     font-size: 14px;
     text-transform: uppercase;
 
@@ -188,7 +262,6 @@
     position: absolute;
     margin-left: 10px;
     cursor: pointer;
-    opacity: 0.7;
 
     height: 100%;
     width: 30px;
@@ -200,7 +273,7 @@
 }
 
 .remove:hover {
-    background: red;
+    background: #ff5258;
 }
 
 .remove:active {
@@ -249,7 +322,19 @@
         width: 100%;
     }
 
-    .input-wrapper button {
+    #top-buttons {
+        padding: 10px;
+    }
+
+    #moon img {
+        height: 25px;
+    }
+
+    #moon span {
+        display: none;
+    }
+
+    #listen {
         display: block;
         margin-top: 10px;
         width: 100%;
@@ -257,11 +342,11 @@
         margin-top: 10px;
     }
 
-    #tweets > .tweets-symbol-container {
+    body #tweets > .tweets-symbol-container {
         width: 100%;
     }
 
-    #tweets > .tweets-symbol-container:not(:only-child):first-child {
+    body #tweets > .tweets-symbol-container:not(:only-child):first-child {
         width: 90%;
     }
 

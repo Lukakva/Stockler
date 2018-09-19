@@ -13,6 +13,7 @@ const UpdateInterval = 30 * 1000
 const TweetDisplayOptions = {
   cards: false,
   width: '100%',
+  theme: 'dark',
   conversation: 'none',
 }
 
@@ -30,6 +31,7 @@ class App extends React.Component {
     this.state = {
       inputIsValid: true,
       isFullScreen: false,
+      darkMode: false,
       tweets: {
         // AAPL: ['id1', 'id2'],
         // TSLA: [],
@@ -145,13 +147,17 @@ class App extends React.Component {
   }
 
   renderTweets() {
+    let tweetOptions = Object.assign(TweetDisplayOptions, {
+      theme: this.state.darkMode ? 'dark' : 'light'
+    })
+
     let containers = Object.keys(this.state.tweets).map(symbol => {
       let tweets = this.state.tweets[symbol].map(id => {
-        return <Tweet tweetId={id} key={id} options={TweetDisplayOptions} onLoad={() => console.log('lel')} />
+        return <Tweet tweetId={id} key={id} options={tweetOptions} />
       })
 
       return (
-        <div id={symbol} key={symbol} className='tweets-symbol-container'>
+        <div id={symbol} key={symbol + tweetOptions.theme} className='tweets-symbol-container'>
           <div className='symbol'>
             <span>$ {symbol}</span>
             <span className='remove' onClick={() => this.removeSymbol(symbol)}>
@@ -168,18 +174,30 @@ class App extends React.Component {
     return containers
   }
 
+  toggleDarkMode() {
+    this.setState({
+      darkMode: !this.state.darkMode,
+    })
+  }
+
   render() {
     return (
-      <div className='app'>
-        {
-          Object.keys(this.state.tweets).length === 0 ? null : (
-            <div
-              id='fullscreen'
-              className={this.state.isFullScreen ? 'arrow-down' : 'arrow-up'}
-              onClick={this.toggleFullScreen.bind(this)}
-            />
-          )
-        }
+      <div className={this.state.darkMode ? 'app dark' : 'app'}>
+        <div id='top-buttons'>
+          <div id='moon' onClick={this.toggleDarkMode.bind(this)}>
+            <img src='/icons/moon.png' />
+            <span>Dark Mode</span>
+          </div>
+          {
+            Object.keys(this.state.tweets).length === 0 ? null : (
+              <div
+                id='fullscreen'
+                className={this.state.isFullScreen ? 'arrow-down' : 'arrow-up'}
+                onClick={this.toggleFullScreen.bind(this)}
+              />
+            )
+          }
+        </div>
         <div className={this.state.isFullScreen ? 'collapsed header' : 'header'}>
           <div className='title-wrapper'>
             <h1 className='title'>Stockler</h1>
