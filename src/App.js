@@ -185,7 +185,7 @@ class App extends React.Component {
       <div className={this.state.darkMode ? 'app dark' : 'app'}>
         <div id='top-buttons'>
           <div id='moon' onClick={this.toggleDarkMode.bind(this)}>
-            <img src='/icons/moon.png' />
+            <img src={'/icons/moon.png'} />
             <span>Dark Mode</span>
           </div>
           {
