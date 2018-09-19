@@ -1,14 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
-
-import './App.css'
-
-import Twitter from './Twitter'
 import { Tweet } from 'react-twitter-widgets'
+
+import '../css/App.css'
+import Twitter from './Twitter'
 
 const copy = obj => JSON.parse(JSON.stringify(obj))
 
-// update once in 20 seconds
+// update once in 30 seconds
 const UpdateInterval = 30 * 1000
 const TweetDisplayOptions = {
   cards: false,
@@ -37,6 +36,38 @@ class App extends React.Component {
         // TSLA: [],
       }
     }
+  }
+
+  inputIsInvalid() {
+    this.setState({
+      inputIsValid: false,
+    })
+  }
+
+  inputIsValid() {
+    this.setState({
+      inputIsValid: true,
+    })
+  }
+
+  onInputKeydown(e) {
+    let keyCode = e.keyCode || e.which
+    // enter
+    if (keyCode === 13) {
+      this.listen()
+    }
+  }
+
+  toggleFullScreen() {
+    this.setState({
+      isFullScreen: !this.state.isFullScreen,
+    })
+  }
+
+  toggleDarkMode() {
+    this.setState({
+      darkMode: !this.state.darkMode,
+    })
   }
 
   /*
@@ -110,32 +141,6 @@ class App extends React.Component {
     })
   }
 
-  inputIsInvalid() {
-    this.setState({
-      inputIsValid: false,
-    })
-  }
-
-  inputIsValid() {
-    this.setState({
-      inputIsValid: true,
-    })
-  }
-
-  onInputKeydown(e) {
-    let keyCode = e.keyCode || e.which
-    // enter
-    if (keyCode === 13) {
-      this.listen()
-    }
-  }
-
-  toggleFullScreen() {
-    this.setState({
-      isFullScreen: !this.state.isFullScreen,
-    })
-  }
-
   async listen() {
     let symbols = this.refs.symbolInput.value
     if (!symbols.length) {
@@ -172,12 +177,6 @@ class App extends React.Component {
     })
 
     return containers
-  }
-
-  toggleDarkMode() {
-    this.setState({
-      darkMode: !this.state.darkMode,
-    })
   }
 
   render() {

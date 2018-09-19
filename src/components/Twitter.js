@@ -24,6 +24,8 @@ export default class Twitter {
       params: params,
     }
 
+    // only using resolve, since this promise is always getting resolved
+    // (might be a bad practice, but handling errors gets exponentially harder)
     return new Promise(resolve => {
       fetch(this.url, {
         method: 'POST',
