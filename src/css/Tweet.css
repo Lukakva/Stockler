@@ -1,0 +1,167 @@
+.tweet {
+    padding: 15px;
+
+    border: 1px solid rgb(225, 232, 237);
+    border-radius: 4px;
+    background-color: white;
+    color: black;
+    margin-bottom: 10px;
+
+    cursor: pointer;
+    display: block;
+
+    font-size: 14px;
+    text-align: left;
+    word-break: break-word;
+    white-space: pre-wrap;
+    text-decoration: none;
+
+    transition: 0.7s;
+
+    animation: fadeIn 0.5s linear forwards;
+}
+
+.tweet.dark {
+    background-color: rgb(10, 19, 28);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.tweet > * {
+    font-family: 'Helvetica';
+}
+
+.tweet-link {
+    color: rgb(43, 123, 185);
+    text-decoration: none;
+}
+
+.tweet-link:hover {
+    color: rgb(73, 153, 215);
+}
+
+.tweet-user {
+    display: flex;
+    align-items: center;
+}
+
+.tweet-body {
+    margin-top: 15px;
+}
+
+.tweet-user-avatar {
+    height: 36px;
+    width: 36px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.tweet-user-avatar img {
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+.tweet-user-info {
+    flex: 1;
+    padding-right: 10px;
+}
+
+.tweet-user-info > div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.tweet-user-name {
+    font-weight: bold;
+    color: inherit;
+}
+
+.tweet-user-screen-name {
+    color: #697882;
+    font-size: 14px;
+}
+
+.tweet-text {
+    line-height: 20px;
+    cursor: default;
+    color: inherit;
+}
+
+.tweet-time {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #697882;
+}
+
+.tweet-misc {
+    color: rgb(105, 120, 130);
+    margin-top: 15px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.tweet-misc div {
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 20px;
+    cursor: default;
+}
+
+.tweet-misc .name {
+    flex: 1;
+}
+
+.tweet-misc .icon {
+    height: 20px;
+    width: 20px;
+    margin-right: 4px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+}
+
+/* Favorites hover */
+.tweet-misc .favorites .icon {
+    background-image: url('/icons/heart.svg');
+}
+
+.tweet-misc .favorites:hover {
+    color: rgb(224, 36, 94);
+}
+
+.tweet-misc .favorites:hover .icon {
+    background-image: url('/icons/heart-hover.svg');
+}
+
+/* User link hover */
+.tweet-misc .profile .icon {
+    background-image: url('/icons/profile.svg');
+}
+
+.tweet-misc .profile:hover {
+    color: rgb(29, 161, 242);
+}
+
+.tweet-misc .profile:hover .icon {
+    background-image: url('/icons/profile-hover.svg');
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

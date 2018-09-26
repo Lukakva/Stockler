@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
-import { Tweet } from 'react-twitter-widgets'
+import Tweet from './Tweet'
 
 import '../css/App.css'
 import Twitter from './Twitter'
@@ -26,6 +26,8 @@ class App extends React.Component {
       // AAPL: setInterval(...),
       // TSLA: setInterval(...),
     }
+
+    window.twitter = this.twitter
 
     this.state = {
       inputIsValid: true,
@@ -83,6 +85,9 @@ class App extends React.Component {
     let response = await this.twitter.getSearch({
       q: '$' + symbol,
       count: count || 20,
+      tweet_mode: 'extended',
+      exclude_replies: true,
+      result_type: 'mixed',
     })
 
     if (response.success) {
@@ -91,13 +96,12 @@ class App extends React.Component {
         tweets[symbol] = []
       }
 
-      // push Ids of tweets to the array
       let appender = unshift ? 'unshift' : 'push'
       let newTweets = response.data.statuses
       newTweets.map(tweet => {
-        if (tweets[symbol].indexOf(tweet.id_str) > -1) return
+        // if (tweets[symbol].indexOf(tweet.id_str) > -1) return
 
-        tweets[symbol][appender](tweet.id_str)
+        tweets[symbol][appender](tweet)
       })
 
       this.setState({
@@ -152,17 +156,15 @@ class App extends React.Component {
   }
 
   renderTweets() {
-    let tweetOptions = Object.assign(TweetDisplayOptions, {
-      theme: this.state.darkMode ? 'dark' : 'light'
-    })
+    let theme = this.state.darkMode ? 'dark' : 'light'
 
     let containers = Object.keys(this.state.tweets).map(symbol => {
-      let tweets = this.state.tweets[symbol].map(id => {
-        return <Tweet tweetId={id} key={id} options={tweetOptions} />
+      let tweets = this.state.tweets[symbol].map(tweet => {
+        return <Tweet tweet={tweet} theme={theme} key={tweet.id_str} />
       })
 
       return (
-        <div id={symbol} key={symbol + tweetOptions.theme} className='tweets-symbol-container'>
+        <div id={symbol} key={symbol} className='tweets-symbol-container'>
           <div className='symbol'>
             <span>$ {symbol}</span>
             <span className='remove' onClick={() => this.removeSymbol(symbol)}>
@@ -180,6 +182,13 @@ class App extends React.Component {
   }
 
   render() {
+    // return (
+    //   <React.Fragment>
+    //     <TweetNew />
+    //     <Tweet tweetId='1044914837833347078' />
+    //   </React.Fragment>
+    // )
+
     return (
       <div className={this.state.darkMode ? 'app dark' : 'app'}>
         <div id='top-buttons'>

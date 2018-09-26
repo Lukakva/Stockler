@@ -64,7 +64,10 @@ class TwitterProxy {
 
     // which method to call on the Twitter API Client
     let methodName = body.method
-    this.twitter[methodName](body.params, this.errorCallback, this.successCallback)
+    let args = body.params
+    args.push(this.errorCallback, this.successCallback)
+
+    this.twitter[methodName].apply(this.twitter, args)
   }
 }
 

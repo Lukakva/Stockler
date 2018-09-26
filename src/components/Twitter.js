@@ -6,13 +6,13 @@ export default class Twitter {
 
     let methods = [
       'getSearch',
+      'getCustomApiCall',
     ]
 
     // creates a dull function that just calls the proxy method
     methods.map(methodName => {
-      this[methodName] = (params, error, success) => {
-        let data = JSON.stringify(params)
-        return this.proxy(methodName, params, error, success)
+      this[methodName] = function() {
+        return this.proxy(methodName, arguments)
       }
     })
   }
@@ -21,7 +21,7 @@ export default class Twitter {
   proxy(methodName, params) {
     let data = {
       method: methodName,
-      params: params,
+      params: Array.prototype.slice.call(params),
     }
 
     // only using resolve, since this promise is always getting resolved

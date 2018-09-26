@@ -241,21 +241,6 @@ body .app .input-wrapper input.error {
     width: 100%;
 }
 
-/* Styling tweets */
-.tweets-scroll > div > * {
-    margin-top: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-}
-
-.tweets-scroll > div {
-    opacity: 0;
-    width: 100%;
-
-    animation: fadeIn 0.5s linear forwards;
-    animation-delay: 1s;
-}
-
 .tweets-scroll > div:last-child > * {
     margin-bottom: 0 !important;
 }
@@ -380,15 +365,5 @@ body .app .input-wrapper input.error {
 
     .symbol .remove {
         width: 28px;
-    }
-}
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
     }
 }
