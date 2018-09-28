@@ -123,10 +123,17 @@ class App extends React.Component {
 
   renderTweets() {
     let theme = this.state.darkMode ? 'dark' : 'light'
+    let ids = []
 
     let containers = Object.keys(this.state.tweets).map(symbol => {
-      let tweets = this.state.tweets[symbol].map(tweet => {
-        return <Tweet tweet={tweet} theme={theme} key={tweet.id_str} />
+      let tweets = []
+
+      this.state.tweets[symbol].map(tweet => {
+        let id = tweet.id_str
+        if (tweets.indexOf(id) > -1) return
+        ids.push(id)
+
+        return <Tweet tweet={tweet} theme={theme} key={id_str} />
       })
 
       return (
