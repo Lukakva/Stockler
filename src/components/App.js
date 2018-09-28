@@ -133,7 +133,7 @@ class App extends React.Component {
         if (tweets.indexOf(id) > -1) return
         ids.push(id)
 
-        return <Tweet tweet={tweet} theme={theme} key={id_str} />
+        return <Tweet tweet={tweet} theme={theme} key={id} />
       })
 
       return (
