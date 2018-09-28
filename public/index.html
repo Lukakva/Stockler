@@ -13,4 +13,11 @@
     <div id="root"></div>
     <div id="tweets"></div>
   </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io('http://localhost:9000');
+    socket.on('connect', () => {});
+    socket.on('data', data => console.log(data));
+    socket.on('disconnect', () => {});
+  </script>
 </html>
