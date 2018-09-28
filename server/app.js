@@ -3,13 +3,9 @@ const log = console.log
 const http = require('http')
 const socket = require('socket.io')
 const Twitter = require('twitter')
-const TwitterProxy = require('./twitter-proxy')
-const getBearerToken = require('./oauth')
-
-const Credentials = {
-  key: 'SZnA3Da7mPuq9sznwryHpaOQQ',
-  secret: 'o71tCbKBPD9GxEnujg9FmvSfmYlNMPWle2O8ybHyhO96FZqiBq',
-}
+// const getBearerToken = require('./oauth')
+const Keys = require('./keys.json')
+console.log(Keys)
 
 class App {
   constructor() {
@@ -20,12 +16,7 @@ class App {
       // TSLA: [Socket, Socket, Socket],
     }
 
-    this.twitter = new Twitter({
-      consumer_key: 'SZnA3Da7mPuq9sznwryHpaOQQ',
-      consumer_secret: 'o71tCbKBPD9GxEnujg9FmvSfmYlNMPWle2O8ybHyhO96FZqiBq',
-      access_token_key: '900440131-1j9Nan4oGoZbYPQWUot7nHV6T6AzBQkXG2D7iua3',
-      access_token_secret: 'VBcASknER4LytwSsHXQ9UyTMPC5WAxxS0hdRLnjlbcp5m'
-    })
+    this.twitter = new Twitter(Keys)
     this.stream = null
   }
 
@@ -49,17 +40,34 @@ class App {
       console.log('Aw Yeah! A new client', client.id)
 
       client.on('addListener', symbol => {
+        symbol = symbol.toUpperCase()
         if (this.symbolListeners[symbol] instanceof Array === false) {
           this.symbolListeners[symbol] = []
         }
 
         if (this.symbolListeners[symbol].indexOf(client) > -1) return
 
+        // when a user starts listening to some realtime tweets,
+        // they might have to wait for a while until new tweets appear,
+        // so send them some old tweets to look at, while new ones appear
+        this.twitter.get('search/tweets', {
+          q: '$' + symbol,
+          count: 10,
+          exclude_replies: true,
+          result_type: 'mixed',
+        }, function(error, tweets, response) {
+           client.emit('data', {
+            symbol: symbol,
+            tweets: tweets.statuses,
+           })
+        })
+
         this.symbolListeners[symbol].push(client)
         this.setupStream()
       })
 
       client.on('removeListener', symbol => {
+        symbol = symbol.toUpperCase()
         if (this.symbolListeners[symbol] instanceof Array === false) return
 
         let index = this.symbolListeners[symbol].indexOf(client)
@@ -150,7 +158,7 @@ class App {
       sockets.forEach(socket => {
         socket.emit('data', {
           symbol: symbol,
-          tweet: tweet,
+          tweets: [tweet],
         })
       })
     })

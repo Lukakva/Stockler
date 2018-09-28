@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Tweet from './Tweet'
 
 import '../css/App.css'
-import Twitter from './Twitter'
 
 const copy = obj => JSON.parse(JSON.stringify(obj))
 
@@ -20,14 +19,8 @@ class App extends React.Component {
   constructor(props) {
     super(props)
 
-    this.twitter = new Twitter()
-    // fetch intervals for each symbol
-    this.fetchTimers = {
-      // AAPL: setInterval(...),
-      // TSLA: setInterval(...),
-    }
-
-    window.twitter = this.twitter
+    this.socket = window.io(window.location.protocol + '//' + window.location.hostname + ':9000')
+    this.socket.on('data', this.handleTweets.bind(this))
 
     this.state = {
       inputIsValid: true,
@@ -72,46 +65,6 @@ class App extends React.Component {
     })
   }
 
-  /*
-
-  fetches recent tweets for a symbol
-  initially, 20 tweets are retrieved for a symbol
-  but after that, 1 tweet is retrieved on every fetch
-
-  */
-  async fetch(symbol, count, unshift) {
-    if (unshift === undefined) unshift = false
-
-    let response = await this.twitter.getSearch({
-      q: '$' + symbol,
-      count: count || 20,
-      tweet_mode: 'extended',
-      exclude_replies: true,
-      result_type: 'mixed',
-    })
-
-    if (response.success) {
-      let tweets = copy(this.state.tweets)
-      if (tweets[symbol] instanceof Array === false) {
-        tweets[symbol] = []
-      }
-
-      let appender = unshift ? 'unshift' : 'push'
-      let newTweets = response.data.statuses
-      newTweets.map(tweet => {
-        // if (tweets[symbol].indexOf(tweet.id_str) > -1) return
-
-        tweets[symbol][appender](tweet)
-      })
-
-      this.setState({
-        tweets: tweets,
-      })
-    } else {
-      alert('Failed to retrieve tweets for symbol $' + symbol + ':', response.data.errors.toString())
-    }
-  }
-
   addSymbol(symbol) {
     if (typeof symbol !== 'string') return
 
@@ -123,14 +76,11 @@ class App extends React.Component {
     let tweets = copy(this.state.tweets)
     tweets[symbol] = []
 
-    this.fetchTimers[symbol] = setInterval(() => {
-      this.fetch(symbol, 1, true)
-    }, UpdateInterval)
-    this.fetch(symbol, 20)
-
     this.setState({
       tweets: tweets,
     })
+
+    this.socket.emit('addListener', symbol)
   }
 
   removeSymbol(symbol) {
@@ -138,7 +88,7 @@ class App extends React.Component {
     delete tweets[symbol]
 
     // stop fetching 'real-time' statuses about this symbol
-    clearInterval(this.fetchTimers[symbol])
+    this.socket.emit('removeListener', symbol)
 
     this.setState({
       tweets: tweets,
@@ -153,6 +103,22 @@ class App extends React.Component {
 
     this.refs.symbolInput.value = ''
     symbols.split(',').map(this.addSymbol.bind(this))
+  }
+
+  handleTweets(data) {
+    let symbol = data.symbol
+    let tweets = data.tweets
+
+    let stateTweets = copy(this.state.tweets)
+    if (stateTweets[symbol] instanceof Array === false) {
+      stateTweets[symbol] = []
+    }
+
+    tweets.map(tweet => stateTweets[symbol].unshift(tweet))
+
+    this.setState({
+      tweets: stateTweets,
+    })
   }
 
   renderTweets() {
@@ -182,13 +148,6 @@ class App extends React.Component {
   }
 
   render() {
-    // return (
-    //   <React.Fragment>
-    //     <TweetNew />
-    //     <Tweet tweetId='1044914837833347078' />
-    //   </React.Fragment>
-    // )
-
     return (
       <div className={this.state.darkMode ? 'app dark' : 'app'}>
         <div id='top-buttons'>

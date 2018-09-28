@@ -7,17 +7,11 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <title>Stockler</title>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <div id="tweets"></div>
   </body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io('http://localhost:9000');
-    socket.on('connect', () => {});
-    socket.on('data', data => console.log(data));
-    socket.on('disconnect', () => {});
-  </script>
 </html>
